@@ -3,11 +3,10 @@ package zvmsdk
 import (
         "fmt"
         "time"
-	"os/exec"
         "os"
-        "github.com/terraform-provider-zvmsdk/logger"
 
         "github.com/hashicorp/terraform/helper/schema"
+        zvmsdkgolib "github.com/zvmsdk-go"
 )
 
 
@@ -22,36 +21,34 @@ func resourceZVMGuest() *schema.Resource {
 			Create: schema.DefaultTimeout(5 * time.Minute),
 		},
                 Schema: map[string]*schema.Schema{
-                        "name": {
+                        "userid": {
                                 Type:     schema.TypeString,
                                 Required: true,
-                                ForceNew: false,
+                                ForceNew: true,
                         },
-                        "vcpu": {
+                        "vcpus": {
                                 Type:     schema.TypeInt,
                                 Optional: true,
                                 Default:  1,
-                                ForceNew: true,
+                                ForceNew: false,
                         },
                 },
         }
 }
 
 func resourceZVMGuestCreate(d *schema.ResourceData, meta interface{}) error {
-        cmd := exec.Command("touch", "/tmp/f1")
-        cmd.Run()
+        var guestid string
+        if name, ok := d.GetOk("userid"); ok {
+                guestid = name.(string)
+        }
 
-        var id = "00000000-0000-0000-0000000000000001"
-        d.SetId(id)
+        d.SetId(guestid)
 
-        // the domain ID must always be saved, otherwise it won't be possible to cleanup a domain
-        // if something bad happens at provisioning time
-        d.Partial(true)
-        d.Set("id", id)
-        d.SetPartial("id")
-        d.Partial(false)
+        var body zvmsdkgolib.GuestCreateBody
+        body.Userid = guestid
+        body.Vcpus = 2
 
-	logger.Log.Printf("pid=%d started with processes", os.Getpid())
+        zvmsdkgolib.GuestCreate(body)
 
         return nil
 }
@@ -63,11 +60,12 @@ func resourceZVMGuestExists(d *schema.ResourceData, meta interface{}) (bool, err
 
 
 func resourceZVMGuestDelete(d *schema.ResourceData, meta interface{}) error {
-        if name, ok := d.GetOk("name"); ok {
-                fmt.Printf("%s", name)
+        var guestid string
+        if name, ok := d.GetOk("userid"); ok {
+                guestid = name.(string)
         }
-        f, _ := os.Create("/tmp/data3")
-        f.Close()
+
+        zvmsdkgolib.GuestDelete(guestid)
 
         return nil
 }
