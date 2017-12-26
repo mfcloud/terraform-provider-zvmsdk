@@ -11,14 +11,14 @@ type Config struct {
 
 // Client libvirt
 type Client struct {
-	client string
+	url string
 }
 
 // Client libvirt, generate libvirt client given URI
 func (c *Config) Client() (*Client, error) {
 
 	client := &Client{
-		client: c.URI,
+		url: c.URI,
 	}
 
 	logger.Log.Printf("[INFO] Created zvmsdk client %s", c.URI)

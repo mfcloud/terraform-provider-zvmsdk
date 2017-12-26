@@ -22,28 +22,38 @@ func resourceZVMVSwitch() *schema.Resource {
                         "name": {
                                 Type:     schema.TypeString,
                                 Required: true,
+                                ForceNew: true,
+                        },
+                        "rdev": {
+                                Type:     schema.TypeString,
+                                Required: true,
                                 ForceNew: false,
                         },
+
                 },
         }
 }
 
 func resourceZVMVSwitchCreate(d *schema.ResourceData, meta interface{}) error {
-        var vswitchname string
+	url := meta.(*Client).url
+
+        var vswitchname,vswitchrdev string
 	if name, ok := d.GetOk("name"); ok {
 		vswitchname = name.(string)
 	}
 
-        d.SetId(vswitchname)
+        if rdev, ok := d.GetOk("rdev"); ok {
+                vswitchrdev = rdev.(string)
+        }
 
-	virConn := meta.(*Client).client
-	logger.Log.Printf("uri is %s", virConn)
+
+        d.SetId(vswitchname)
 
 	var body zvmsdkgolib.VswitchCreateBody
 	body.Name = vswitchname
-	body.Rdev = "1000"
+	body.Rdev = vswitchrdev
 
-	zvmsdkgolib.VswitchCreate(body)
+	zvmsdkgolib.VswitchCreate(url, body)
 
         return nil
 }
@@ -59,12 +69,15 @@ func resourceZVMVSwitchExists(d *schema.ResourceData, meta interface{}) (bool, e
 
 
 func resourceZVMVSwitchDelete(d *schema.ResourceData, meta interface{}) error {
+
+	url := meta.(*Client).url
+
         var vswitchname string
         if name, ok := d.GetOk("name"); ok {
                 vswitchname = name.(string)
         }
 
-	zvmsdkgolib.VswitchDelete(vswitchname)
+	zvmsdkgolib.VswitchDelete(url, vswitchname)
 
         return nil
 }

@@ -41,36 +41,42 @@ func resourceZVMGuestCreate(d *schema.ResourceData, meta interface{}) error {
                 guestid = name.(string)
         }
 
+	url := meta.(*Client).url
+
         d.SetId(guestid)
 
         var body zvmsdkgolib.GuestCreateBody
         body.Userid = guestid
         body.Vcpus = 2
 
-        zvmsdkgolib.GuestCreate(body)
+        zvmsdkgolib.GuestCreate(url, body)
 
         return nil
 }
 
 func resourceZVMGuestExists(d *schema.ResourceData, meta interface{}) (bool, error) {
+	url := meta.(*Client).url
+
         var guestid string
         if name, ok := d.GetOk("userid"); ok {
                 guestid = name.(string)
         }
 
-	zvmsdkgolib.GuestQuery(guestid)
+	zvmsdkgolib.GuestQuery(url, guestid)
 
         return true, nil
 }
 
 
 func resourceZVMGuestDelete(d *schema.ResourceData, meta interface{}) error {
+	url := meta.(*Client).url
+
         var guestid string
         if name, ok := d.GetOk("userid"); ok {
                 guestid = name.(string)
         }
 
-        zvmsdkgolib.GuestDelete(guestid)
+        zvmsdkgolib.GuestDelete(url, guestid)
 
         return nil
 }
