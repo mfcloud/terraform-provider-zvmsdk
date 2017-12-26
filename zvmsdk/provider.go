@@ -16,7 +16,7 @@ func Provider() terraform.ResourceProvider {
 			"uri": {
 				Type:        schema.TypeString,
 				Required:    true,
-				DefaultFunc: schema.EnvDefaultFunc("LIBVIRT_DEFAULT_URI", nil),
+				DefaultFunc: schema.EnvDefaultFunc("http://localhost:8080", nil),
 			},
 		},
 
