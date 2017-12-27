@@ -88,6 +88,7 @@ func resourceZVMVSwitchUpdate(d *schema.ResourceData, meta interface{}) error {
                 vswitchname = name.(string)
         }
 	logger.Log.Printf("Read %s", vswitchname)
+
         return nil
 }
 

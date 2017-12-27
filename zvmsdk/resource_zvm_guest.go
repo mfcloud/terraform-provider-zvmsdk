@@ -82,6 +82,18 @@ func resourceZVMGuestDelete(d *schema.ResourceData, meta interface{}) error {
 }
 
 func resourceZVMGuestUpdate(d *schema.ResourceData, meta interface{}) error {
+        var guestid string
+        if name, ok := d.GetOk("userid"); ok {
+                guestid = name.(string)
+        }
+
+        url := meta.(*Client).url
+
+        var body zvmsdkgolib.GuestCreateBody
+        body.Userid = guestid
+        body.Vcpus = 2
+
+        zvmsdkgolib.GuestCreate(url, body)
         return nil
 }
 
