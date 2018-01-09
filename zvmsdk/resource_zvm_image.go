@@ -45,7 +45,7 @@ func resourceZVMImageCreate(d *schema.ResourceData, meta interface{}) error {
 
         var body zvmsdkgolib.ImageCreateBody
         body.Name = imagename
-        body.Remote_host = "abc"
+        body.RemoteHost = "abc"
 	body.Meta = nil
 	body.Url = "url"
 
@@ -80,6 +80,14 @@ func resourceZVMImageUpdate(d *schema.ResourceData, meta interface{}) error {
 
 
 func resourceZVMImageRead(d *schema.ResourceData, meta interface{}) error {
+        url := meta.(*Client).url
+
+        var imagename string
+        if name, ok := d.GetOk("name"); ok {
+                imagename = name.(string)
+        }
+
+        zvmsdkgolib.ImageGet(url, imagename)
 
         return nil
 }

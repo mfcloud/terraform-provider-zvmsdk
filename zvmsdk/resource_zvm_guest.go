@@ -1,7 +1,6 @@
 package zvmsdk
 
 import (
-        "fmt"
         "time"
 
         "github.com/hashicorp/terraform/helper/schema"
@@ -62,7 +61,7 @@ func resourceZVMGuestExists(d *schema.ResourceData, meta interface{}) (bool, err
                 guestid = name.(string)
         }
 
-	zvmsdkgolib.GuestQuery(url, guestid)
+	zvmsdkgolib.GuestGet(url, guestid)
 
         return true, nil
 }
@@ -99,9 +98,14 @@ func resourceZVMGuestUpdate(d *schema.ResourceData, meta interface{}) error {
 
 
 func resourceZVMGuestRead(d *schema.ResourceData, meta interface{}) error {
-        if userid, ok := d.GetOk("userid"); ok {
-                fmt.Printf("%s", userid)
+        var guestid string
+        if name, ok := d.GetOk("userid"); ok {
+                guestid = name.(string)
         }
+
+        url := meta.(*Client).url
+
+        zvmsdkgolib.GuestGet(url, guestid)
 
         return nil
 }
