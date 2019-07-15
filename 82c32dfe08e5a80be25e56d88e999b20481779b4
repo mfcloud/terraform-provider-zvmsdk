@@ -1,0 +1,7 @@
+Code-Review+2: ji chen <jichenjc@cn.ibm.com>
+Verified+1: ji chen <jichenjc@cn.ibm.com>
+Submitted-by: ji chen <jichenjc@cn.ibm.com>
+Submitted-at: Mon, 15 Jul 2019 07:07:04 +0000
+Reviewed-on: https://review.gerrithub.io/c/mfcloud/terraform-provider-zvmsdk/+/394008
+Project: mfcloud/terraform-provider-zvmsdk
+Branch: refs/heads/master
