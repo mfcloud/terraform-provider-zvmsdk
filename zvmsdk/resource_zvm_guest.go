@@ -4,7 +4,7 @@ import (
         "time"
 
         "github.com/hashicorp/terraform/helper/schema"
-        zvmsdkgolib "github.com/zvmsdk-go"
+        zvmsdkgolib "github.com/mfcloud/zvmsdk-go"
 )
 
 
@@ -44,7 +44,7 @@ func resourceZVMGuestCreate(d *schema.ResourceData, meta interface{}) error {
 
         d.SetId(guestid)
 
-        var body zvmsdkgolib.GuestCreateBody
+        var body zvmsdkgolib.GuestCreateBodyStruct
         body.Userid = guestid
         body.Vcpus = 2
 
@@ -88,7 +88,7 @@ func resourceZVMGuestUpdate(d *schema.ResourceData, meta interface{}) error {
 
         url := meta.(*Client).url
 
-        var body zvmsdkgolib.GuestCreateBody
+        var body zvmsdkgolib.GuestCreateBodyStruct
         body.Userid = guestid
         body.Vcpus = 2
 

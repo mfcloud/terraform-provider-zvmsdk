@@ -4,7 +4,7 @@ import (
         "time"
 
         "github.com/hashicorp/terraform/helper/schema"
-        zvmsdkgolib "github.com/zvmsdk-go"
+        zvmsdkgolib "github.com/mfcloud/zvmsdk-go"
 )
 
 
@@ -47,7 +47,7 @@ func resourceZVMImageCreate(d *schema.ResourceData, meta interface{}) error {
         body.Name = imagename
         body.RemoteHost = "abc"
 	body.Meta = nil
-	body.Url = "url"
+	body.URL = "url"
 
         zvmsdkgolib.ImageCreate(url, body)
 

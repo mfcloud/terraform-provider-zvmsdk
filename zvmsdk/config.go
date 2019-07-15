@@ -1,7 +1,7 @@
 package zvmsdk
 
 import (
-	"github.com/terraform-provider-zvmsdk/logger"
+	"github.com/mfcloud/terraform-provider-zvmsdk/logger"
 )
 
 // Config struct for the libvirt-provider

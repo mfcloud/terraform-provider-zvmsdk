@@ -2,9 +2,9 @@ package zvmsdk
 
 import (
         "time"
-	"github.com/terraform-provider-zvmsdk/logger"
+	"github.com/mfcloud/terraform-provider-zvmsdk/logger"
         "github.com/hashicorp/terraform/helper/schema"
-	zvmsdkgolib "github.com/zvmsdk-go"
+	zvmsdkgolib "github.com/mfcloud/zvmsdk-go"
 )
 
 
