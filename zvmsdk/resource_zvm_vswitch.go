@@ -1,53 +1,50 @@
 package zvmsdk
 
 import (
-        "time"
+	"github.com/hashicorp/terraform/helper/schema"
 	"github.com/mfcloud/terraform-provider-zvmsdk/logger"
-        "github.com/hashicorp/terraform/helper/schema"
 	zvmsdkgolib "github.com/mfcloud/zvmsdk-go"
+	"time"
 )
 
-
 func resourceZVMVSwitch() *schema.Resource {
-        return &schema.Resource{
-                Create: resourceZVMVSwitchCreate,
-                Delete: resourceZVMVSwitchDelete,
-                Read:   resourceZVMVSwitchRead,
-                Exists: resourceZVMVSwitchExists,
+	return &schema.Resource{
+		Create: resourceZVMVSwitchCreate,
+		Delete: resourceZVMVSwitchDelete,
+		Read:   resourceZVMVSwitchRead,
+		Exists: resourceZVMVSwitchExists,
 		Update: resourceZVMVSwitchUpdate,
-                Timeouts: &schema.ResourceTimeout{
+		Timeouts: &schema.ResourceTimeout{
 			Create: schema.DefaultTimeout(5 * time.Minute),
 		},
-                Schema: map[string]*schema.Schema{
-                        "name": {
-                                Type:     schema.TypeString,
-                                Required: true,
-                                ForceNew: true,
-                        },
-                        "rdev": {
-                                Type:     schema.TypeString,
-                                Required: true,
-                                ForceNew: false,
-                        },
-
-                },
-        }
+		Schema: map[string]*schema.Schema{
+			"name": {
+				Type:     schema.TypeString,
+				Required: true,
+				ForceNew: true,
+			},
+			"rdev": {
+				Type:     schema.TypeString,
+				Required: true,
+				ForceNew: false,
+			},
+		},
+	}
 }
 
 func resourceZVMVSwitchCreate(d *schema.ResourceData, meta interface{}) error {
 	url := meta.(*Client).url
 
-        var vswitchname,vswitchrdev string
+	var vswitchname, vswitchrdev string
 	if name, ok := d.GetOk("name"); ok {
 		vswitchname = name.(string)
 	}
 
-        if rdev, ok := d.GetOk("rdev"); ok {
-                vswitchrdev = rdev.(string)
-        }
+	if rdev, ok := d.GetOk("rdev"); ok {
+		vswitchrdev = rdev.(string)
+	}
 
-
-        d.SetId(vswitchname)
+	d.SetId(vswitchname)
 
 	var body zvmsdkgolib.VswitchCreateBody
 	body.Name = vswitchname
@@ -55,51 +52,48 @@ func resourceZVMVSwitchCreate(d *schema.ResourceData, meta interface{}) error {
 
 	zvmsdkgolib.VswitchCreate(url, body)
 
-        return nil
+	return nil
 }
 
 func resourceZVMVSwitchExists(d *schema.ResourceData, meta interface{}) (bool, error) {
-        var vswitchname string
-        if name, ok := d.GetOk("name"); ok {
-                vswitchname = name.(string)
-        }
+	var vswitchname string
+	if name, ok := d.GetOk("name"); ok {
+		vswitchname = name.(string)
+	}
 	logger.Log.Printf("Read %s", vswitchname)
-        return true, nil
+	return true, nil
 }
-
 
 func resourceZVMVSwitchDelete(d *schema.ResourceData, meta interface{}) error {
 
 	url := meta.(*Client).url
 
-        var vswitchname string
-        if name, ok := d.GetOk("name"); ok {
-                vswitchname = name.(string)
-        }
+	var vswitchname string
+	if name, ok := d.GetOk("name"); ok {
+		vswitchname = name.(string)
+	}
 
 	zvmsdkgolib.VswitchDelete(url, vswitchname)
 
-        return nil
+	return nil
 }
 
 func resourceZVMVSwitchUpdate(d *schema.ResourceData, meta interface{}) error {
-        var vswitchname string
-        if name, ok := d.GetOk("name"); ok {
-                vswitchname = name.(string)
-        }
+	var vswitchname string
+	if name, ok := d.GetOk("name"); ok {
+		vswitchname = name.(string)
+	}
 	logger.Log.Printf("Read %s", vswitchname)
 
-        return nil
+	return nil
 }
-
 
 func resourceZVMVSwitchRead(d *schema.ResourceData, meta interface{}) error {
-        var vswitchname string
-        if name, ok := d.GetOk("name"); ok {
-                vswitchname = name.(string)
-        }
-        logger.Log.Printf("Read %s", vswitchname)
+	var vswitchname string
+	if name, ok := d.GetOk("name"); ok {
+		vswitchname = name.(string)
+	}
+	logger.Log.Printf("Read %s", vswitchname)
 
-        return nil
+	return nil
 }
-

@@ -2,14 +2,13 @@ package logger
 
 import (
 	"flag"
-	"os"
 	"log"
+	"os"
 )
 
 var (
-	Log      *log.Logger
+	Log *log.Logger
 )
-
 
 func init() {
 	// set location of log file

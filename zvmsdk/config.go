@@ -25,4 +25,3 @@ func (c *Config) Client() (*Client, error) {
 
 	return client, nil
 }
-

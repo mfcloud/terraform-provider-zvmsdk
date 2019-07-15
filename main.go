@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/mfcloud/terraform-provider-zvmsdk/zvmsdk"
 	"github.com/hashicorp/terraform/plugin"
+	"github.com/mfcloud/terraform-provider-zvmsdk/zvmsdk"
 	"math/rand"
 	"time"
 )

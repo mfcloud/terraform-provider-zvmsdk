@@ -1,112 +1,119 @@
 package zvmsdk
 
 import (
-        "time"
+	"time"
 
-        "github.com/hashicorp/terraform/helper/schema"
-        zvmsdkgolib "github.com/mfcloud/zvmsdk-go"
+	"github.com/hashicorp/terraform/helper/schema"
+	zvmsdkgolib "github.com/mfcloud/zvmsdk-go"
 )
 
-
 func resourceZVMGuest() *schema.Resource {
-        return &schema.Resource{
-                Create: resourceZVMGuestCreate,
-                Delete: resourceZVMGuestDelete,
-                Read:   resourceZVMGuestRead,
-                Exists: resourceZVMGuestExists,
+	return &schema.Resource{
+		Create: resourceZVMGuestCreate,
+		Delete: resourceZVMGuestDelete,
+		Read:   resourceZVMGuestRead,
+		Exists: resourceZVMGuestExists,
 		Update: resourceZVMGuestUpdate,
-                Timeouts: &schema.ResourceTimeout{
+		Timeouts: &schema.ResourceTimeout{
 			Create: schema.DefaultTimeout(5 * time.Minute),
 		},
-                Schema: map[string]*schema.Schema{
-                        "userid": {
-                                Type:     schema.TypeString,
-                                Required: true,
-                                ForceNew: true,
-                        },
-                        "vcpus": {
-                                Type:     schema.TypeInt,
-                                Optional: true,
-                                Default:  1,
-                                ForceNew: false,
-                        },
-                },
-        }
+		Schema: map[string]*schema.Schema{
+			"userid": {
+				Type:     schema.TypeString,
+				Required: true,
+				ForceNew: true,
+			},
+			"vcpus": {
+				Type:     schema.TypeInt,
+				Optional: true,
+				Default:  1,
+				ForceNew: false,
+			},
+			"diskpool": {
+				Type:     schema.TypeString,
+				Required: true,
+				ForceNew: false,
+			},
+		},
+	}
 }
 
 func resourceZVMGuestCreate(d *schema.ResourceData, meta interface{}) error {
-        var guestid string
-        if name, ok := d.GetOk("userid"); ok {
-                guestid = name.(string)
-        }
+	var guestid string
+	var diskpool string
+	if name, ok := d.GetOk("userid"); ok {
+		guestid = name.(string)
+	}
+
+	if name, ok := d.GetOk("diskpool"); ok {
+		diskpool = name.(string)
+	}
 
 	url := meta.(*Client).url
 
-        d.SetId(guestid)
+	d.SetId(guestid)
 
-        var body zvmsdkgolib.GuestCreateBodyStruct
-        body.Userid = guestid
-        body.Vcpus = 2
+	var body zvmsdkgolib.GuestCreateBodyStruct
+	body.Userid = guestid
+	body.Vcpus = d.Get("vcpus").(int)
+	body.DiskPool = diskpool
 
-        zvmsdkgolib.GuestCreate(url, body)
+	zvmsdkgolib.GuestCreate(url, body)
 
-        return nil
+	return nil
 }
 
 func resourceZVMGuestExists(d *schema.ResourceData, meta interface{}) (bool, error) {
 	url := meta.(*Client).url
 
-        var guestid string
-        if name, ok := d.GetOk("userid"); ok {
-                guestid = name.(string)
-        }
+	var guestid string
+	if name, ok := d.GetOk("userid"); ok {
+		guestid = name.(string)
+	}
 
 	zvmsdkgolib.GuestGet(url, guestid)
 
-        return true, nil
+	return true, nil
 }
-
 
 func resourceZVMGuestDelete(d *schema.ResourceData, meta interface{}) error {
 	url := meta.(*Client).url
 
-        var guestid string
-        if name, ok := d.GetOk("userid"); ok {
-                guestid = name.(string)
-        }
+	var guestid string
+	if name, ok := d.GetOk("userid"); ok {
+		guestid = name.(string)
+	}
 
-        zvmsdkgolib.GuestDelete(url, guestid)
+	zvmsdkgolib.GuestDelete(url, guestid)
 
-        return nil
+	return nil
 }
 
 func resourceZVMGuestUpdate(d *schema.ResourceData, meta interface{}) error {
-        var guestid string
-        if name, ok := d.GetOk("userid"); ok {
-                guestid = name.(string)
-        }
+	var guestid string
+	if name, ok := d.GetOk("userid"); ok {
+		guestid = name.(string)
+	}
 
-        url := meta.(*Client).url
+	url := meta.(*Client).url
 
-        var body zvmsdkgolib.GuestCreateBodyStruct
-        body.Userid = guestid
-        body.Vcpus = 2
+	var body zvmsdkgolib.GuestCreateBodyStruct
+	body.Userid = guestid
+	body.Vcpus = 2
 
-        zvmsdkgolib.GuestCreate(url, body)
-        return nil
+	zvmsdkgolib.GuestCreate(url, body)
+	return nil
 }
-
 
 func resourceZVMGuestRead(d *schema.ResourceData, meta interface{}) error {
-        var guestid string
-        if name, ok := d.GetOk("userid"); ok {
-                guestid = name.(string)
-        }
+	var guestid string
+	if name, ok := d.GetOk("userid"); ok {
+		guestid = name.(string)
+	}
 
-        url := meta.(*Client).url
+	url := meta.(*Client).url
 
-        zvmsdkgolib.GuestGet(url, guestid)
+	zvmsdkgolib.GuestGet(url, guestid)
 
-        return nil
+	return nil
 }
-

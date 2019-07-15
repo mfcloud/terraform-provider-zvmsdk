@@ -9,7 +9,6 @@ import (
 // Global poolMutexKV
 var poolMutexKV = mutexkv.NewMutexKV()
 
-// Provider libvirt
 func Provider() terraform.ResourceProvider {
 	return &schema.Provider{
 		Schema: map[string]*schema.Schema{
@@ -21,12 +20,11 @@ func Provider() terraform.ResourceProvider {
 		},
 
 		ResourcesMap: map[string]*schema.Resource{
-			"zvm_guest":    resourceZVMGuest(),
-                        "zvm_vswitch":  resourceZVMVSwitch(),
-			"zvm_image":    resourceZVMImage(),
+			"zvm_guest":   resourceZVMGuest(),
+			"zvm_vswitch": resourceZVMVSwitch(),
+			"zvm_image":   resourceZVMImage(),
 		},
 		ConfigureFunc: providerConfigure,
-
 	}
 }
 
