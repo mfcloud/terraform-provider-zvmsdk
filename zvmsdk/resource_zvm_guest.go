@@ -34,21 +34,26 @@ func resourceZVMGuest() *schema.Resource {
 				Required: true,
 				ForceNew: false,
 			},
+			"userprofile": {
+				Type:     schema.TypeString,
+				Required: true,
+				ForceNew: false,
+			},
+			"memory": {
+				Type:     schema.TypeInt,
+				Optional: true,
+				Default:  2048,
+				ForceNew: false,
+			},
 		},
 	}
 }
 
 func resourceZVMGuestCreate(d *schema.ResourceData, meta interface{}) error {
 	var guestid string
-	var diskpool string
 	if name, ok := d.GetOk("userid"); ok {
 		guestid = name.(string)
 	}
-
-	if name, ok := d.GetOk("diskpool"); ok {
-		diskpool = name.(string)
-	}
-
 	url := meta.(*Client).url
 
 	d.SetId(guestid)
@@ -56,7 +61,9 @@ func resourceZVMGuestCreate(d *schema.ResourceData, meta interface{}) error {
 	var body zvmsdkgolib.GuestCreateBodyStruct
 	body.Userid = guestid
 	body.Vcpus = d.Get("vcpus").(int)
-	body.DiskPool = diskpool
+	body.DiskPool = d.Get("diskpool").(string)
+	body.Memory = d.Get("memory").(int)
+	body.UserProfile = d.Get("userprofile").(string)
 
 	zvmsdkgolib.GuestCreate(url, body)
 
