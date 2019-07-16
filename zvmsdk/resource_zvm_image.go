@@ -44,9 +44,9 @@ func resourceZVMImageCreate(d *schema.ResourceData, meta interface{}) error {
 
 	var body zvmsdkgolib.ImageCreateBody
 	body.Name = imagename
-	body.RemoteHost = "abc"
+	body.RemoteHost = d.Get("remotehost").(string)
 	body.Meta = nil
-	body.URL = "url"
+	body.URL = url
 
 	zvmsdkgolib.ImageCreate(url, body)
 

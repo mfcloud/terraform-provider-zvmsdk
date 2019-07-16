@@ -1,6 +1,7 @@
 package zvmsdk
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/hashicorp/terraform/helper/schema"
@@ -31,7 +32,7 @@ func resourceZVMGuest() *schema.Resource {
 			},
 			"diskpool": {
 				Type:     schema.TypeString,
-				Required: true,
+				Optional: true,
 				ForceNew: false,
 			},
 			"userprofile": {
@@ -39,11 +40,45 @@ func resourceZVMGuest() *schema.Resource {
 				Required: true,
 				ForceNew: false,
 			},
+			"imageid": {
+				Type:     schema.TypeString,
+				Required: true,
+				ForceNew: true,
+			},
 			"memory": {
 				Type:     schema.TypeInt,
 				Optional: true,
 				Default:  2048,
 				ForceNew: false,
+			},
+			"disklist": {
+				Type:     schema.TypeList,
+				Required: true,
+				ForceNew: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"size": {
+							Type:     schema.TypeString,
+							Required: true,
+							ForceNew: true,
+						},
+						"diskpool": {
+							Type:     schema.TypeString,
+							Optional: true,
+							ForceNew: true,
+						},
+						"boot": {
+							Type:     schema.TypeBool,
+							Optional: true,
+							ForceNew: true,
+						},
+						"format": {
+							Type:     schema.TypeString,
+							Optional: true,
+							ForceNew: true,
+						},
+					},
+				},
 			},
 		},
 	}
@@ -65,7 +100,21 @@ func resourceZVMGuestCreate(d *schema.ResourceData, meta interface{}) error {
 	body.Memory = d.Get("memory").(int)
 	body.UserProfile = d.Get("userprofile").(string)
 
+	for i := 0; i < d.Get("disklist.#").(int); i++ {
+		var disk zvmsdkgolib.GuestCreateDiskStruct
+
+		prefix := fmt.Sprintf("disklist.%d", i)
+		if size, ok := d.GetOk(prefix + ".size"); ok {
+			disk.Size = size.(string)
+		}
+
+		body.DiskList = append(body.DiskList, disk)
+	}
+
 	zvmsdkgolib.GuestCreate(url, body)
+
+	imageid := d.Get("imageid").(string)
+	zvmsdkgolib.GuestDeploy(url, guestid, imageid, "100")
 
 	return nil
 }
