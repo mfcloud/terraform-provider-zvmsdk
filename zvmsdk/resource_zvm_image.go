@@ -28,25 +28,68 @@ func resourceZVMImage() *schema.Resource {
 				Optional: true,
 				ForceNew: false,
 			},
+			"meta": {
+				Type:     schema.TypeMap,
+				Required: true,
+				ForceNew: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"osversion": {
+							Type:     schema.TypeString,
+							Required: true,
+							ForceNew: true,
+						},
+						"md5sum": {
+							Type:     schema.TypeString,
+							Optional: true,
+							ForceNew: true,
+						},
+					},
+				},
+			},
+			"remotehost": {
+				Type:     schema.TypeString,
+				Optional: true,
+				ForceNew: false,
+			},
 		},
 	}
 }
 
 func resourceZVMImageCreate(d *schema.ResourceData, meta interface{}) error {
-	var imagename string
-	if name, ok := d.GetOk("name"); ok {
-		imagename = name.(string)
+	var name string
+	if item, ok := d.GetOk("name"); ok {
+		name = item.(string)
+	}
+
+	var remotehost string
+	if item, ok := d.GetOk("remotehost"); ok {
+		remotehost = item.(string)
+	}
+
+	var locationurl string
+	if item, ok := d.GetOk("url"); ok {
+		locationurl = item.(string)
 	}
 
 	url := meta.(*Client).url
 
-	d.SetId(imagename)
+	d.SetId(name)
 
+	m := make(map[string]string)
+	if item, ok := d.GetOk("meta.osversion"); ok {
+		// FIXME: make it a struct later
+		m["os_version"] = item.(string)
+	}
+	if item, ok := d.GetOk("meta.md5sum"); ok {
+		// FIXME: make it a struct later
+		m["md5sum"] = item.(string)
+	}
 	var body zvmsdkgolib.ImageCreateBody
-	body.Name = imagename
-	body.RemoteHost = d.Get("remotehost").(string)
-	body.Meta = nil
-	body.URL = url
+	body.Name = name
+	body.RemoteHost = remotehost
+	body.Meta = m
+	body.URL = locationurl
 
 	zvmsdkgolib.ImageCreate(url, body)
 

@@ -8,6 +8,16 @@ provider "zvm" {
   uri   = "http://127.0.0.1:8081"
 }
   
+resource "zvm_image" "image1" {
+  provider = zvm.s8080
+  name = "image1"
+  meta = {
+    osversion = "rhel7.6"
+    md5sum = "12345678"
+  }
+  url = "file://a/b/c"
+  remotehost = "remote@1.2.3.4"
+}
 
 resource "zvm_guest" "guest1" {
   provider = zvm.s8080
