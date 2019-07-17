@@ -10,7 +10,7 @@ provider "zvm" {
   
 
 resource "zvm_guest" "guest1" {
-  provider = zvm.s8081
+  provider = zvm.s8080
   userid = "domain-1"
   userprofile = "p1"
   imageid = "image1"
@@ -18,14 +18,14 @@ resource "zvm_guest" "guest1" {
 
   disklist {
        size = "1g"
-       boot = true
-       diskpool = "ECKD:eckdpool1"
+       boot = 0
+       format = "ext4"
   }
 
   disklist {
        size = "2g"
-       boot = false
-       diskpool = "ECKD:eckdpool1"
+       boot = 1
+       format = "ext4"
   }
 }
 

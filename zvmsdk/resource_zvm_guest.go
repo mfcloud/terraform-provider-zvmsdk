@@ -68,7 +68,8 @@ func resourceZVMGuest() *schema.Resource {
 							ForceNew: true,
 						},
 						"boot": {
-							Type:     schema.TypeBool,
+							Type:     schema.TypeInt,
+							Default:  0,
 							Optional: true,
 							ForceNew: true,
 						},
@@ -106,6 +107,13 @@ func resourceZVMGuestCreate(d *schema.ResourceData, meta interface{}) error {
 		prefix := fmt.Sprintf("disklist.%d", i)
 		if size, ok := d.GetOk(prefix + ".size"); ok {
 			disk.Size = size.(string)
+		}
+		if format, ok := d.GetOk(prefix + ".format"); ok {
+			disk.Format = format.(string)
+		}
+		if boot, ok := d.GetOk(prefix + ".boot"); ok {
+			b := boot.(int)
+			disk.Boot = int32(b)
 		}
 
 		body.DiskList = append(body.DiskList, disk)
