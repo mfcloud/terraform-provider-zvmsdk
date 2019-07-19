@@ -29,7 +29,6 @@ resource "zvm_guest" "guest1" {
   disklist {
        size = "1g"
        boot = 0
-       format = "ext4"
   }
 
   disklist {

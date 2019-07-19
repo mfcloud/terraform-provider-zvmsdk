@@ -94,7 +94,7 @@ func resourceZVMGuestCreate(d *schema.ResourceData, meta interface{}) error {
 
 	d.SetId(guestid)
 
-	var body zvmsdkgolib.GuestCreateBodyStruct
+	var body zvmsdkgolib.GuestCreateBody
 	body.Userid = guestid
 	body.Vcpus = d.Get("vcpus").(int)
 	body.DiskPool = d.Get("diskpool").(string)
@@ -102,7 +102,7 @@ func resourceZVMGuestCreate(d *schema.ResourceData, meta interface{}) error {
 	body.UserProfile = d.Get("userprofile").(string)
 
 	for i := 0; i < d.Get("disklist.#").(int); i++ {
-		var disk zvmsdkgolib.GuestCreateDiskStruct
+		var disk zvmsdkgolib.GuestCreateDisk
 
 		prefix := fmt.Sprintf("disklist.%d", i)
 		if size, ok := d.GetOk(prefix + ".size"); ok {
@@ -121,8 +121,11 @@ func resourceZVMGuestCreate(d *schema.ResourceData, meta interface{}) error {
 
 	zvmsdkgolib.GuestCreate(url, body)
 
-	imageid := d.Get("imageid").(string)
-	zvmsdkgolib.GuestDeploy(url, guestid, imageid, "100")
+	var deploybody zvmsdkgolib.GuestDeployBody
+	deploybody.Image = d.Get("imageid").(string)
+	deploybody.Vdev = "100"
+	deploybody.Userid = guestid
+	zvmsdkgolib.GuestDeploy(url, deploybody)
 
 	return nil
 }
@@ -161,7 +164,7 @@ func resourceZVMGuestUpdate(d *schema.ResourceData, meta interface{}) error {
 
 	url := meta.(*Client).url
 
-	var body zvmsdkgolib.GuestCreateBodyStruct
+	var body zvmsdkgolib.GuestCreateBody
 	body.Userid = guestid
 	body.Vcpus = 2
 
