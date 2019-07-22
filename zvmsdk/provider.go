@@ -23,6 +23,7 @@ func Provider() terraform.ResourceProvider {
 			"zvm_guest":   resourceZVMGuest(),
 			"zvm_vswitch": resourceZVMVSwitch(),
 			"zvm_image":   resourceZVMImage(),
+			"zvm_interface": resourceZVMInterface(),
 		},
 		ConfigureFunc: providerConfigure,
 	}

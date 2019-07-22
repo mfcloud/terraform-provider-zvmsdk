@@ -38,6 +38,24 @@ resource "zvm_guest" "guest1" {
   }
 }
 
+resource "zvm_interface" "domain-1-if" {
+  provider = zvm.s8080
+  userid = "domain-1"
+  osversion = "rhel7.6"
+
+  networks {
+       ip = "1.2.3.4"
+       vdev = "1000"
+  }
+
+  networks {
+       ip = "5.6.7.8"
+       vdev = "2000"
+       gateway = "6.7.8.9"
+  }
+}
+
+
 terraform {
   required_version = ">= 0.12"
 }
