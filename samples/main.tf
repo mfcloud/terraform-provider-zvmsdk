@@ -55,6 +55,12 @@ resource "zvm_interface" "domain-1-if" {
   }
 }
 
+resource "zvm_vswitchgrant" "couple1" {
+  provider = zvm.s8080
+  nic = "1000"
+  userid = "domain-1"
+  vswitch = "vsw1"
+}
 
 terraform {
   required_version = ">= 0.12"

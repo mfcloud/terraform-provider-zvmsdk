@@ -20,10 +20,11 @@ func Provider() terraform.ResourceProvider {
 		},
 
 		ResourcesMap: map[string]*schema.Resource{
-			"zvm_guest":   resourceZVMGuest(),
-			"zvm_vswitch": resourceZVMVSwitch(),
-			"zvm_image":   resourceZVMImage(),
-			"zvm_interface": resourceZVMInterface(),
+			"zvm_guest":        resourceZVMGuest(),
+			"zvm_vswitch":      resourceZVMVSwitch(),
+			"zvm_image":        resourceZVMImage(),
+			"zvm_interface":    resourceZVMInterface(),
+			"zvm_vswitchgrant": resourceZVMVSwitchGrant(),
 		},
 		ConfigureFunc: providerConfigure,
 	}
