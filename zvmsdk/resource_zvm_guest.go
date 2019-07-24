@@ -6,6 +6,7 @@ import (
 
 	"github.com/hashicorp/terraform/helper/schema"
 	zvmsdkgolib "github.com/mfcloud/zvmsdk-go"
+	"github.com/mfcloud/terraform-provider-zvmsdk/logger"
 )
 
 func resourceZVMGuest() *schema.Resource {
@@ -68,8 +69,8 @@ func resourceZVMGuest() *schema.Resource {
 							ForceNew: true,
 						},
 						"boot": {
-							Type:     schema.TypeInt,
-							Default:  0,
+							Type:     schema.TypeString,
+							Default:  "0",
 							Optional: true,
 							ForceNew: true,
 						},
@@ -86,16 +87,17 @@ func resourceZVMGuest() *schema.Resource {
 }
 
 func resourceZVMGuestCreate(d *schema.ResourceData, meta interface{}) error {
-	var guestid string
+	var userid string
 	if name, ok := d.GetOk("userid"); ok {
-		guestid = name.(string)
+		userid = name.(string)
 	}
 	url := meta.(*Client).url
+	logger.Log.Printf("Start to create %s", userid)	
 
-	d.SetId(guestid)
+	d.SetId(userid)
 
 	var body zvmsdkgolib.GuestCreateBody
-	body.Userid = guestid
+	body.Userid = userid 
 	body.Vcpus = d.Get("vcpus").(int)
 	body.DiskPool = d.Get("diskpool").(string)
 	body.Memory = d.Get("memory").(int)
@@ -112,20 +114,22 @@ func resourceZVMGuestCreate(d *schema.ResourceData, meta interface{}) error {
 			disk.Format = format.(string)
 		}
 		if boot, ok := d.GetOk(prefix + ".boot"); ok {
-			b := boot.(int)
-			disk.Boot = int32(b)
+			disk.Boot = boot.(string)
 		}
 
 		body.DiskList = append(body.DiskList, disk)
 	}
 
-	zvmsdkgolib.GuestCreate(url, body)
+	logger.Log.Printf("Create guest with: %+v", body)
+	res, data := zvmsdkgolib.GuestCreate(url, body)
+	logger.Log.Printf("Create guest ret: %+v, %+v", res, string(data))
 
 	var deploybody zvmsdkgolib.GuestDeployBody
 	deploybody.Image = d.Get("imageid").(string)
 	deploybody.Vdev = "100"
-	deploybody.Userid = guestid
-	zvmsdkgolib.GuestDeploy(url, deploybody)
+	logger.Log.Printf("Deploy guest with: %+v", body)
+	res, data = zvmsdkgolib.GuestDeploy(url, userid, deploybody)
+	logger.Log.Printf("Deploy guest ret: %+v, %+v", res, string(data))
 
 	return nil
 }
@@ -133,12 +137,12 @@ func resourceZVMGuestCreate(d *schema.ResourceData, meta interface{}) error {
 func resourceZVMGuestExists(d *schema.ResourceData, meta interface{}) (bool, error) {
 	url := meta.(*Client).url
 
-	var guestid string
+	var userid string
 	if name, ok := d.GetOk("userid"); ok {
-		guestid = name.(string)
+		userid = name.(string)
 	}
 
-	zvmsdkgolib.GuestGet(url, guestid)
+	zvmsdkgolib.GuestGet(url, userid)
 
 	return true, nil
 }
@@ -146,26 +150,26 @@ func resourceZVMGuestExists(d *schema.ResourceData, meta interface{}) (bool, err
 func resourceZVMGuestDelete(d *schema.ResourceData, meta interface{}) error {
 	url := meta.(*Client).url
 
-	var guestid string
+	var userid string
 	if name, ok := d.GetOk("userid"); ok {
-		guestid = name.(string)
+		userid = name.(string)
 	}
 
-	zvmsdkgolib.GuestDelete(url, guestid)
+	zvmsdkgolib.GuestDelete(url, userid)
 
 	return nil
 }
 
 func resourceZVMGuestUpdate(d *schema.ResourceData, meta interface{}) error {
-	var guestid string
+	var userid string
 	if name, ok := d.GetOk("userid"); ok {
-		guestid = name.(string)
+		userid = name.(string)
 	}
 
 	url := meta.(*Client).url
 
 	var body zvmsdkgolib.GuestCreateBody
-	body.Userid = guestid
+	body.Userid = userid 
 	body.Vcpus = 2
 
 	zvmsdkgolib.GuestCreate(url, body)
@@ -173,14 +177,14 @@ func resourceZVMGuestUpdate(d *schema.ResourceData, meta interface{}) error {
 }
 
 func resourceZVMGuestRead(d *schema.ResourceData, meta interface{}) error {
-	var guestid string
+	var userid string
 	if name, ok := d.GetOk("userid"); ok {
-		guestid = name.(string)
+		userid = name.(string)
 	}
 
 	url := meta.(*Client).url
 
-	zvmsdkgolib.GuestGet(url, guestid)
+	zvmsdkgolib.GuestGet(url, userid)
 
 	return nil
 }
