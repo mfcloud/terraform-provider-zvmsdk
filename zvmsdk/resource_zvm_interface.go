@@ -6,6 +6,7 @@ import (
 
 	"github.com/hashicorp/terraform/helper/schema"
 	zvmsdkgolib "github.com/mfcloud/zvmsdk-go"
+	"github.com/mfcloud/terraform-provider-zvmsdk/logger"
 )
 
 func resourceZVMInterface() *schema.Resource {
@@ -29,8 +30,8 @@ func resourceZVMInterface() *schema.Resource {
 				ForceNew: true,
 			},
 			"active": {
-				Type:     schema.TypeInt,
-				Default:  1,
+				Type:     schema.TypeString,
+				Default:  "1",
 				Optional: true,
 				ForceNew: true,
 			},
@@ -98,16 +99,16 @@ func resourceZVMInterfaceCreate(d *schema.ResourceData, meta interface{}) error 
 		osversion = item.(string)
 	}
 
-	var active int
+	var active string
 	if item, ok := d.GetOk("active"); ok {
-		active = item.(int)
+		active = item.(string)
 	}
+	logger.Log.Printf("Start to create interface for %s", userid)
 
 	url := meta.(*Client).url
-	d.SetId(userid)
 
+	d.SetId(userid)
 	var body zvmsdkgolib.GuestInterfaceCreateBody
-	body.Userid = userid
 	body.If.Osversion = osversion
 	body.If.Active = active
 
@@ -143,7 +144,9 @@ func resourceZVMInterfaceCreate(d *schema.ResourceData, meta interface{}) error 
 
 		body.If.Networks = append(body.If.Networks, interf)
 	}
-	zvmsdkgolib.GuestInterfaceCreate(url, body)
+	logger.Log.Printf("Start to create interface with body %+v", body)
+	res, data := zvmsdkgolib.GuestInterfaceCreate(url, userid, body)
+	logger.Log.Printf("Res is %v, %v", res, string(data))
 	return nil
 }
 

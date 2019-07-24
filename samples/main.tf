@@ -8,7 +8,7 @@ provider "zvm" {
   uri   = "http://127.0.0.1:8080"
 }
   
-resource "zvm_guest" "guest1" {
+resource "zvm_guest" "test1" {
   provider = zvm.s8080
   userid = "TERRTST1"
   userprofile = "osdflt"
@@ -18,4 +18,17 @@ resource "zvm_guest" "guest1" {
        size = "4g"
        diskpool = "ECKD:xcateckd"
   }
+}
+
+resource "zvm_interface" "domain-1-if" {
+  provider = zvm.s8080
+  userid = zvm_guest.test1.id
+  osversion = "rhel7.6"
+
+  networks {
+       ip = "1.2.3.4"
+       vdev = "1000"
+       cidr = "1.2.3.0/24"
+  }
+  active = "0"
 }

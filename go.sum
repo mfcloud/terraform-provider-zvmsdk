@@ -234,6 +234,10 @@ github.com/mfcloud/zvmsdk-go v0.0.0-20190724015153-79255b4c15d0 h1:Yx7HXHnmSV+v+
 github.com/mfcloud/zvmsdk-go v0.0.0-20190724015153-79255b4c15d0/go.mod h1:tn3XVD2T+U831VOYdi91QfRBgQ8qBH61nDGiWu0CipQ=
 github.com/mfcloud/zvmsdk-go v0.0.0-20190724020440-4b573feffda9 h1:sN9Fa/yhzOJnqOnr+JY3WADDcg/GUCUIHHxCa2iVmjU=
 github.com/mfcloud/zvmsdk-go v0.0.0-20190724020440-4b573feffda9/go.mod h1:tn3XVD2T+U831VOYdi91QfRBgQ8qBH61nDGiWu0CipQ=
+github.com/mfcloud/zvmsdk-go v0.0.0-20190724042607-d06cbe30d7a3 h1:bL+xJasTqL+WoW17VZTAeTJ8Chym6jvuz+aIaAiEKgw=
+github.com/mfcloud/zvmsdk-go v0.0.0-20190724042607-d06cbe30d7a3/go.mod h1:tn3XVD2T+U831VOYdi91QfRBgQ8qBH61nDGiWu0CipQ=
+github.com/mfcloud/zvmsdk-go v0.0.0-20190724051940-ba97b773ec71 h1:OeIkBKXLM8W8H7J/mKm4GbN8urGcFsvjRAt0pm+zX8g=
+github.com/mfcloud/zvmsdk-go v0.0.0-20190724051940-ba97b773ec71/go.mod h1:tn3XVD2T+U831VOYdi91QfRBgQ8qBH61nDGiWu0CipQ=
 github.com/microcosm-cc/bluemonday v1.0.1/go.mod h1:hsXNsILzKxV+sX77C5b8FSuKF00vh2OMYv+xgHpAMF4=
 github.com/miekg/dns v1.0.8/go.mod h1:W1PPwlIAgtquWBMBEV9nkV9Cazfe8ScdGz/Lj7v3Nrg=
 github.com/mitchellh/cli v1.0.0 h1:iGBIsUe3+HZ/AD/Vd7DErOt5sU9fa8Uj7A2s1aggv1Y=
