@@ -4,5 +4,5 @@ go 1.12
 
 require (
 	github.com/hashicorp/terraform v0.12.5
-	github.com/mfcloud/zvmsdk-go v0.0.0-20190725025729-ed3f43518b66
+	github.com/mfcloud/zvmsdk-go v0.0.0-20190725074328-6bc4d7566834
 )
