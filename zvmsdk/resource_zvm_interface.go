@@ -5,8 +5,8 @@ import (
 	"time"
 
 	"github.com/hashicorp/terraform/helper/schema"
-	zvmsdkgolib "github.com/mfcloud/zvmsdk-go"
 	"github.com/mfcloud/terraform-provider-zvmsdk/logger"
+	zvmsdkgolib "github.com/mfcloud/zvmsdk-go"
 )
 
 func resourceZVMInterface() *schema.Resource {
@@ -107,7 +107,8 @@ func resourceZVMInterfaceCreate(d *schema.ResourceData, meta interface{}) error 
 
 	url := meta.(*Client).url
 
-	d.SetId(userid)
+	id := fmt.Sprintf("%s-nic", userid)
+	d.SetId(id)
 	var body zvmsdkgolib.GuestInterfaceCreateBody
 	body.If.Osversion = osversion
 	body.If.Active = active

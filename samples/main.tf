@@ -32,3 +32,13 @@ resource "zvm_interface" "domain-1-if" {
   }
   active = "0"
 }
+
+resource "zvm_vswitchgrant" "domgrant" {
+  provider = zvm.s8080
+  userid = zvm_guest.test1.id
+
+  nic = "1000"
+  vswitch = "xcatvsw2"
+
+  depends_on = [zvm_interface.domain-1-if]
+}

@@ -5,8 +5,8 @@ import (
 	"time"
 
 	"github.com/hashicorp/terraform/helper/schema"
-	zvmsdkgolib "github.com/mfcloud/zvmsdk-go"
 	"github.com/mfcloud/terraform-provider-zvmsdk/logger"
+	zvmsdkgolib "github.com/mfcloud/zvmsdk-go"
 )
 
 func resourceZVMGuest() *schema.Resource {
@@ -92,12 +92,12 @@ func resourceZVMGuestCreate(d *schema.ResourceData, meta interface{}) error {
 		userid = name.(string)
 	}
 	url := meta.(*Client).url
-	logger.Log.Printf("Start to create %s", userid)	
+	logger.Log.Printf("Start to create %s", userid)
 
 	d.SetId(userid)
 
 	var body zvmsdkgolib.GuestCreateBody
-	body.Userid = userid 
+	body.Userid = userid
 	body.Vcpus = d.Get("vcpus").(int)
 	body.DiskPool = d.Get("diskpool").(string)
 	body.Memory = d.Get("memory").(int)
@@ -169,7 +169,7 @@ func resourceZVMGuestUpdate(d *schema.ResourceData, meta interface{}) error {
 	url := meta.(*Client).url
 
 	var body zvmsdkgolib.GuestCreateBody
-	body.Userid = userid 
+	body.Userid = userid
 	body.Vcpus = 2
 
 	zvmsdkgolib.GuestCreate(url, body)

@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/hashicorp/terraform/helper/schema"
+	"github.com/mfcloud/terraform-provider-zvmsdk/logger"
 	zvmsdkgolib "github.com/mfcloud/zvmsdk-go"
 )
 
@@ -60,7 +61,9 @@ func resourceZVMVSwitchGrantCreate(d *schema.ResourceData, meta interface{}) err
 	body.Vswitch = vswitch
 	body.Nic = nic
 
-	zvmsdkgolib.VswitchGrant(url, body)
+	logger.Log.Printf("Grant: %+v", body)
+	res, data := zvmsdkgolib.VswitchGrant(url, body)
+	logger.Log.Printf("Deploy guest ret: %+v, %+v", res, string(data))
 
 	return nil
 }
