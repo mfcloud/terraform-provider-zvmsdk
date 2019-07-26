@@ -1,6 +1,6 @@
 provider "zvm" {
   alias = "s8080"
-  uri = "http://9.60.29.50:8080"
+  uri = "http://9.60.29.96:8888"
 }
 
 provider "zvm" {
