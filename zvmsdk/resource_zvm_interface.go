@@ -148,6 +148,9 @@ func resourceZVMInterfaceCreate(d *schema.ResourceData, meta interface{}) error 
 	logger.Log.Printf("Start to create interface with body %+v", body)
 	res, data := zvmsdkgolib.GuestInterfaceCreate(url, userid, body)
 	logger.Log.Printf("Res is %v, %v", res, string(data))
+	if isFailed(res) {
+		return fmt.Errorf("Error create interface: %+v, %+v", res, string(data))
+	}
 	return nil
 }
 

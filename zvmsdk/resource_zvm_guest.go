@@ -123,7 +123,7 @@ func resourceZVMGuestCreate(d *schema.ResourceData, meta interface{}) error {
 	logger.Log.Printf("Create guest with: %+v", body)
 	res, data := zvmsdkgolib.GuestCreate(url, body)
 	// FIXME: following is output, we need parse and get value of Vdev
-	// {"rs": 0, "overallRC": 0, "modID": null, "rc": 0, "output": 
+	// {"rs": 0, "overallRC": 0, "modID": null, "rc": 0, "output":
 	//  [{"size": "4g", "is_boot_disk": "0", "disk_pool": "ECKD:xcateckd", "vdev": "0100"}], "errmsg": ""}
 	logger.Log.Printf("Create guest ret: %+v, %+v", res, string(data))
 	if isFailed(res) {
@@ -137,8 +137,8 @@ func resourceZVMGuestCreate(d *schema.ResourceData, meta interface{}) error {
 	res, data = zvmsdkgolib.GuestDeploy(url, userid, deploybody)
 	logger.Log.Printf("Deploy guest ret: %+v, %+v", res, string(data))
 	if isFailed(res) {
-                return fmt.Errorf("Error deploy guest: %+v, %+v", res, string(data))
-        }
+		return fmt.Errorf("Error deploy guest: %+v, %+v", res, string(data))
+	}
 
 	return nil
 }
@@ -164,7 +164,10 @@ func resourceZVMGuestDelete(d *schema.ResourceData, meta interface{}) error {
 		userid = name.(string)
 	}
 
-	zvmsdkgolib.GuestDelete(url, userid)
+	res, data := zvmsdkgolib.GuestDelete(url, userid)
+	if isFailed(res) {
+		return fmt.Errorf("Error delete guest: %+v, %+v", res, string(data))
+	}
 
 	return nil
 }

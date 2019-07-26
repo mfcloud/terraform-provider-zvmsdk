@@ -64,6 +64,9 @@ func resourceZVMVSwitchGrantCreate(d *schema.ResourceData, meta interface{}) err
 	logger.Log.Printf("Grant: %+v", body)
 	res, data := zvmsdkgolib.VswitchGrant(url, body)
 	logger.Log.Printf("Deploy guest ret: %+v, %+v", res, string(data))
+	if isFailed(res) {
+		return fmt.Errorf("Error couple and grant: %+v, %+v", res, string(data))
+	}
 
 	return nil
 }
