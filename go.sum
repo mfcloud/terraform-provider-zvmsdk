@@ -202,6 +202,8 @@ github.com/mfcloud/zvmsdk-go v0.0.0-20190725073956-3bb6467aedcc h1:BG16ZeRLaafnG
 github.com/mfcloud/zvmsdk-go v0.0.0-20190725073956-3bb6467aedcc/go.mod h1:1mkLfsc3QNv3MrVkVu4iS/+v26iISi89nIJnfcF5Nj4=
 github.com/mfcloud/zvmsdk-go v0.0.0-20190725074328-6bc4d7566834 h1:3k06TD5B5m20FvC20M+3nUvRDQDPecVmpRqHOkzADk0=
 github.com/mfcloud/zvmsdk-go v0.0.0-20190725074328-6bc4d7566834/go.mod h1:1mkLfsc3QNv3MrVkVu4iS/+v26iISi89nIJnfcF5Nj4=
+github.com/mfcloud/zvmsdk-go v0.0.0-20190731033205-4089e63a7195 h1:1Qy4juSM0axQxxZ/XIJi2lozmePgylZbvnctCBmTOxs=
+github.com/mfcloud/zvmsdk-go v0.0.0-20190731033205-4089e63a7195/go.mod h1:1mkLfsc3QNv3MrVkVu4iS/+v26iISi89nIJnfcF5Nj4=
 github.com/microcosm-cc/bluemonday v1.0.1/go.mod h1:hsXNsILzKxV+sX77C5b8FSuKF00vh2OMYv+xgHpAMF4=
 github.com/miekg/dns v1.0.8/go.mod h1:W1PPwlIAgtquWBMBEV9nkV9Cazfe8ScdGz/Lj7v3Nrg=
 github.com/mitchellh/cli v1.0.0 h1:iGBIsUe3+HZ/AD/Vd7DErOt5sU9fa8Uj7A2s1aggv1Y=
